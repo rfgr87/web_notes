@@ -1,0 +1,17 @@
+<h2>To delete a note click the button</h2>
+  <form action="/user/delete_note" method="POST">
+   <input id="hidden" type="hidden" name="_method" value="patch">
+    
+    <label>User's Notes:</label><br>
+    <%if !@notes.empty?%>
+      <% @notes.each do |note|%>
+        <li>
+        <input type="radio" name="note_id" id="<%=note.id%>" value="<%=note.id%>"><%= note.name %></input><br>
+         <p><%=note.notes%><br>
+        </li>
+        <%end%><br>
+      <%else%>
+      <p>There are no notes.<p>
+      <%end%>
+    <input type="submit" value="Delete Note">
+  </form>

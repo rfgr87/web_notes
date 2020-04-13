@@ -1,0 +1,14 @@
+<form action="/user/edit_note" method="POST">
+    <label>Select Note:</label><br>
+    <%if @notes.size != 0%>
+      <%@notes.each do |note|%>
+        <li>
+        <input type="radio" name="note_id" id="<%= note.id %>" value="<%= note.id %>"><%= note.name %></input>
+        </li>
+        <%end%><br>
+      <%else%>
+      <p>There are no notes at this moment.<p>
+      <%end%>
+      <br>
+    <input type="submit" value="Select Note">
+  </form>

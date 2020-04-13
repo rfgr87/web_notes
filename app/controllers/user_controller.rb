@@ -6,14 +6,33 @@ class UsersController < ApplicationController
     erb :'user/main'
   end
 
+  get '/user/singup' do
+    erb :'user/singup'
+  end
+
   get '/user/login' do 
     erb :'/user/login'
   end
 
+  get '/user/create_note' do 
+    erb :'/user/create_note'
+  end
+
+  get '/user/delete_note' do 
+    @user = User.find(session[:id])
+    @notes = @user.notes
+    erb :'/user/delete_note'
+  end
+
+  get '/user/select_note' do 
+    @user = User.find_by(session[:id])
+    @notes = @user.notes
+    erb :'/user/select_note'
+  end
 
 
   post "/user/singup" do
-    @doctor = User.create(name: params[:name], username: params[:username], email: params[:email], password: params[:password])
+    @user = User.create(name: params[:name], username: params[:username], email: params[:email], password: params[:password])
     if !@user.id.nil?
       erb :'/user/login'
     else
@@ -21,15 +40,29 @@ class UsersController < ApplicationController
     end
   end
 
-  post '/user/login' do
-    @user = User.find_by(username: params[:username], email: params[:email])
-    if @user && @user.authenticate(params[:password])
-      session[:id] = @user.id 
-      erb :'/user/show' #poner aqui user/:id
+  post '/user/create_note' do
+    @user = User.find_by(session[:id])
+    @note = Note.create(name: params[:name], notes: params[:notes])
+    if !@note.id.nil?
+      @user.notes << @note
+      @user.save
+      erb :'/user/:id'
     else
       erb :'/user/failure'
     end
   end
+
+  post '/user/login' do
+    @user = User.find_by(username: params[:username], email: params[:email])
+    if @user && @user.authenticate(params[:password])
+      session[:id] = @user.id 
+      erb :'/user/:id' #poner aqui user/:id
+    else
+      erb :'/user/failure'
+    end
+  end
+
+  
 
   get "/user/failure" do
     erb :'/user/failure'
@@ -40,10 +73,7 @@ class UsersController < ApplicationController
     redirect to '/'
   end
 
-  get '/user/id' do 
-    @user = User.find(session[:doctor_id])
-    erb :'/user/show' # cambiar a user/:id
-  end
+
 
   get '/user/edit' do 
     @user = User.find(session[:id])
@@ -52,19 +82,20 @@ class UsersController < ApplicationController
 
   
 
-  patch '/user/:id' do #cambiar a :id
-    @user = User.find(session[:id])
-    @user.update(params[:user])
-    erb :'doctors/:id'
+  
+
+  #Aqui hay un bug
+  patch '/user/delete_note' do 
+    @user = User.find_by(session[:id])
+    @note = Note.find(params[:note_id])
+    if !!@note.destroy
+      @user.save
+      erb :'/user/:id'
+    else
+      erb :'/user/failure'
+    end
   end
 
-  patch '/user/delete_note' do 
-    @user = User.find_by(params[:id])
-    @note = Note.find_by(params[:note_id])
-    @note.destroy
-    @user.save
-    erb :'doctors/:id'
-  end
 
   get '/user/select_note' do 
     @user = User.find(session[:id])
@@ -78,17 +109,28 @@ class UsersController < ApplicationController
     erb :'user/edit_note'
   end
   
+
+  #AQui hay un bug....
   patch '/user/edit_note' do 
-    @user = User.find_by(params[:id])
+    @user = User.find_by(session[:id])
     @note = Note.find_by(params[:note_id])
-    if !@note.nil?
-      @user.notes << @note
-      @user.save
+    @note.update(name: params[:note_name], notes: params[:notes])
+    binding.pry
+    @user.save
+    if @note.name == params[:note_name]
+      erb :'/user/:id'
     else
-      @note = Note.create(name: params[:note_name], notes: params[:notes])
-      @user.notes << @note
-      @user.save
+      erb :'/user/failure'
     end
+  end
+  
+  get '/user/:id' do 
+    @user = User.find(session[:id])
+    erb :'/user/:id' # cambiar a user/:id
+  end
+
+  patch '/user/:id' do #cambiar a :id
+    @user = User.find(session[:id])
     erb :'user/:id'
   end
 
