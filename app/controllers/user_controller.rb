@@ -80,9 +80,6 @@ class UsersController < ApplicationController
     erb :'/user/edit'
   end
 
-  
-
-  
 
   #Aqui hay un bug
   patch '/user/delete_note' do 
@@ -115,7 +112,6 @@ class UsersController < ApplicationController
     @user = User.find_by(session[:id])
     @note = Note.find_by(params[:note_id])
     @note.update(name: params[:note_name], notes: params[:notes])
-    binding.pry
     @user.save
     if @note.name == params[:note_name]
       erb :'/user/:id'
@@ -131,6 +127,7 @@ class UsersController < ApplicationController
 
   patch '/user/:id' do #cambiar a :id
     @user = User.find(session[:id])
+    @user.update(params[:user])
     erb :'user/:id'
   end
 
