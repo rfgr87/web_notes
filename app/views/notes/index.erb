@@ -1,0 +1,18 @@
+<h1>User: <%=@user.name%></h1><br>
+
+<% if !@user.notes.empty?%>
+    <%@user.notes.each do |note|%>
+    <li><h4>Note Name: </h4><%=note.name%><br>
+        <h4>Note Content: </h4> <%=note.notes%><br>
+        <a href="/notes/<%=note.id%>">Note </a><br>
+        <a href="/notes/<%=note.id%>/edit"> Edit</a><br>
+        <br>
+        </li>
+
+      <%end%>
+    <%else%>
+    <%="You currently have no notes."%>
+    <%end%>
+
+<p> To go to your view page go to: <a href='/user/:id'>User Page</a>.</p>
+

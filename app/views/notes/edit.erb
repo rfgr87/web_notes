@@ -1,14 +1,12 @@
 <h2>Note Name: <%=@note.name%></h2><br>
 
-<form action="/notes/edit" method="POST">
+<form action="/notes/<%=@note.id%>/edit" method="POST">
 <input id="hidden" type="hidden" name="_method" value="patch">
 
     <label>Note information:</label><br>
     <%=@note.name%><br>
     <br>
-    <p>Note ID:<p>
-    <input type="button" name="note_id" id="<%= @note.id %>" value="<%=@note.id%>"</input><br>
-    <br>
+    
     <h4>Note details:</h4>
     <%if !@note.notes.empty?%>
         <%=@note.name%><br>
@@ -19,12 +17,9 @@
       <p>There are no notes at this moment.<p>
       <%end%>
       <h4>To edit this note:</h4>
-      <input type="radio" name="note_id" id="note_id" value= "<%=@note.id%>"<%= 'checked' if !!@note %>><%=@note.id%></input><br>
-      <input type="text" name="note_name" id="note_name" value="Title"</input><br>
+      <input type="text" name="note_name" id="note_name" value="Title"></input><br>
       <textarea name="notes" id="notes" placeholder="<%=@note.notes%>" onkeyup="document.getElementById('prevCom').innerHTML = this.value"></textarea>
 <div id="prevCom"></div>​
     <input type="submit" value="Edit Note">
   </form>
-  <br>
-
-<p>To delete a note go to: <a href='/notes/delete'>Delete a Note</a>.<br></p>
+  

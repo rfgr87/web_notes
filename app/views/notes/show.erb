@@ -1,0 +1,12 @@
+<h3>Note: <%= @note.name%></h3><br>
+<p>Note Content: <%= @note.notes%><p>
+
+<p> To edit note <a href='/notes/<%=@note.id%>/edit'>Edit Note</a>.</p>
+<p>To delete this note click the button</p>
+  <form action="/notes/<%=@note.id%>/delete" method="POST">
+   <input id="hidden" type="hidden" name="_method" value="delete">
+    <input type="submit" value="Delete Note">
+  </form><br>
+<p> To go to your view page go to: <a href='/user/<%=current_user.id%>'>User Page</a>.</p>
+
+

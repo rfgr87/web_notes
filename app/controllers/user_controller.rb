@@ -51,15 +51,15 @@ class UsersController < ApplicationController
 
   
   get '/user/:id' do 
-    @user = User.find(session[:id])
-    erb :'/user/:id' # cambiar a user/:id
+    @user = User.find(params[:id])
+    erb :'/user/show' # cambiar a user/:id
   end
 
   patch '/user/:id' do #cambiar a :id
     @user = User.find(session[:id])
     @user.update(params[:user])
     @user.save
-    erb :'user/:id'
+    erb :'user/show'
   end
 
 end
