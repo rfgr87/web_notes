@@ -1,8 +1,16 @@
 
 class NotesController < ApplicationController
     
-    get '/notes/new' do 
-        erb :'/notes/new'
+    get '/notes/new' do
+      redirect "/" if !user_logged_in?     
+      erb :'/notes/new'
+
+      # if !user_logged_in?
+      #   redirect "/"
+      # else
+      #   erb :'/notes/new'
+      # end
+
     end
 
     get '/notes' do
@@ -10,18 +18,12 @@ class NotesController < ApplicationController
       erb :'/notes/index'
     end
 
-    # get '/notes/delete' do 
-    #     @user = User.find(session[:id])
-    #     @notes = @user.notes
-    #     erb :'/notes/delete'
-    #   end
-
     post '/notes' do
-        @user = User.find(current_user.id)
-        @note = Note.create(name: params[:name], notes: params[:notes])
+        @user = current_user
+        @note = Note.create(name: params[:name], notes: params[:notes], user_id: @user.id)
         if !@note.id.nil?
-          @user.notes << @note
-          @user.save
+          # @user.notes << @note
+          # @user.save
           redirect "/notes"
         else
           erb :'/user/failure'
