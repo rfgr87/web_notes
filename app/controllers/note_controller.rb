@@ -10,13 +10,13 @@ class NotesController < ApplicationController
       erb :'/notes/index'
     end
 
-    get '/notes/delete' do 
-        @user = User.find(session[:id])
-        @notes = @user.notes
-        erb :'/notes/delete'
-      end
+    # get '/notes/delete' do 
+    #     @user = User.find(session[:id])
+    #     @notes = @user.notes
+    #     erb :'/notes/delete'
+    #   end
 
-    post '/notes/new' do
+    post '/notes' do
         @user = User.find(current_user.id)
         @note = Note.create(name: params[:name], notes: params[:notes])
         if !@note.id.nil?
@@ -34,16 +34,6 @@ class NotesController < ApplicationController
         erb :'/notes/select'
       end
 
-      get '/notes/edit' do 
-        @user = User.find(session[:id])
-        erb :'/notes/edit'
-      end
-
-      # post '/notes/edit' do 
-      #   @user = User.find(session[:id])
-      #   @note = Note.find(params[:note_id])
-      #   erb :'notes/edit'
-      # end
 
       delete '/notes/delete' do 
         @user = User.find(current_user.id)
